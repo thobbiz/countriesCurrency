@@ -1,6 +1,6 @@
-## String Analyzer
+## CountriesCurrecny
 
-StringAnalyzer is a backend service built with Golang that collects strings and returns fact about each string to the user.
+ContriesCurrency is a backend service built with Golang that collects information about countries and their exchange rate and stores in a database.
 
 ## Features:
 - rate limiting using `golang.org/x/time/rate`
