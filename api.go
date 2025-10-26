@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"time"
 )
@@ -19,6 +20,7 @@ func fetchCountries() ([]CountryApiResponse, error) {
 		err := fmt.Errorf("Could not fetch data from [%s]", API_NAME)
 		return nil, err
 	}
+	log.Printf("✅ External API responded: %d", resp.StatusCode)
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
@@ -54,12 +56,4 @@ func fetchExchangeRates() (*ExchangeRateResponse, error) {
 	}
 
 	return &exchangeRates, nil
-}
-
-func createCountryMap(countries []Country) map[string]Country {
-	countryMap := make(map[string]Country)
-	for _, country := range countries {
-		countryMap[country.Name] = country
-	}
-	return countryMap
 }

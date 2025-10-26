@@ -19,7 +19,7 @@ func main() {
 	dsn := os.Getenv("DB_SOURCE")
 
 	log.Printf("--- DEBUG ---")
-	log.Printf("DB_HOST: [%s]", dsn)
+	log.Printf("DB_SOURCE: [%s]", dsn)
 	log.Printf("-------------")
 
 	// dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPass, dbHost, dbPort, dbName)
@@ -69,7 +69,7 @@ func openDB(dsn string) (*sql.DB, error) {
 		log.Fatal("Failed to ping database:", err)
 		return nil, err
 	}
-	log.Println("✅ Database connection successful")
+	log.Println("Database connection successful")
 	return db, nil
 }
 
