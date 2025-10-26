@@ -16,7 +16,7 @@ func init() {
 	}
 }
 
-func main() { // Load .env only if it exists (for local dev)
+func main() {
 	_ = godotenv.Load()
 
 	dsn := os.Getenv("DB_SOURCE")
