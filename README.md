@@ -1,6 +1,6 @@
 ## CountriesCurrecny
 
-ContriesCurrency is a backend service built with Golang that collects information about countries and their exchange rate and stores in a database.
+CountriesCurrency is a backend service built with Golang that collects information about countries and their exchange rate and stores in a database.
 
 ## Features:
 - rate limiting using `golang.org/x/time/rate`
