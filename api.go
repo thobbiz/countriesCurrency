@@ -12,7 +12,7 @@ import (
 func fetchCountries() ([]CountryApiResponse, error) {
 	API_NAME := "https://restcountries.com/v2/all?fields=name,capital,region,population,flag,currencies"
 	client := &http.Client{
-		Timeout: 5 * time.Second,
+		Timeout: 10 * time.Second,
 	}
 
 	resp, err := client.Get(API_NAME)
@@ -20,7 +20,7 @@ func fetchCountries() ([]CountryApiResponse, error) {
 		err := fmt.Errorf("Could not fetch data from [%s]", API_NAME)
 		return nil, err
 	}
-	log.Printf("✅ External API responded: %d", resp.StatusCode)
+	log.Printf("External API responded: %d", resp.StatusCode)
 	defer resp.Body.Close()
 
 	body, err := io.ReadAll(resp.Body)
