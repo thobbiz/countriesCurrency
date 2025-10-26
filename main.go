@@ -18,6 +18,12 @@ func main() {
 	dbPort := os.Getenv("DB_PORT")
 	dbName := os.Getenv("DB_NAME")
 
+	log.Printf("--- DEBUG ---")
+	log.Printf("DB_HOST: [%s]", dbHost)
+	log.Printf("DB_PORT: [%s]", dbPort)
+	log.Printf("DB_USER: [%s]", dbUser)
+	log.Printf("-------------")
+
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPass, dbHost, dbPort, dbName)
 
 	port := os.Getenv("DB_PORT")
