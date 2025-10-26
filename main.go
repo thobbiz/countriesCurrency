@@ -2,39 +2,49 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-sql-driver/mysql"
 	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {
 
-	dbUser := os.Getenv("DB_USER")
-	dbPass := os.Getenv("DB_PASS")
-	dbHost := os.Getenv("DB_HOST")
-	dbPort := os.Getenv("DB_PORT")
-	dbName := os.Getenv("DB_NAME")
+	// dbUser := os.Getenv("DB_USER")
+	// dbPass := os.Getenv("DB_PASS")
+	// dbHost := os.Getenv("DB_HOST")
+	// dbPort := os.Getenv("DB_PORT")
+	dsn := os.Getenv("DB_SOURCE")
 
 	log.Printf("--- DEBUG ---")
-	log.Printf("DB_HOST: [%s]", dbHost)
-	log.Printf("DB_PORT: [%s]", dbPort)
-	log.Printf("DB_USER: [%s]", dbUser)
+	log.Printf("DB_HOST: [%s]", dbSource)
 	log.Printf("-------------")
 
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPass, dbHost, dbPort, dbName)
+	// dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPass, dbHost, dbPort, dbName)
+
+	cfg, err := mysql.ParseDSN(dsn)
+	if err != nil {
+		log.Fatalf("❌ Could not parse DSN: %v", err)
+	}
 
 	port := os.Getenv("DB_PORT")
 	if port == "" {
 		port = "7070" // Use 7070 as a fallback for local development
 	}
 
-	db, err := openDB(dsn)
+	cfg.Net = "tcp"
+
+	db, err := openDB(cfg.FormatDSN())
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// db, err := openDB(dsn)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
 	model := &CountryModel{
 		DB: db,
