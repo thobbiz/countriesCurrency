@@ -38,7 +38,7 @@ func main() {
 
 	db, err := openDB(cfg.FormatDSN())
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
 	}
 
 	// db, err := openDB(dsn)
@@ -62,11 +62,11 @@ func main() {
 func openDB(dsn string) (*sql.DB, error) {
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
-		log.Fatal("Failed to open database:", err)
+		log.Print("Failed to open database:", err)
 		return nil, err
 	}
 	if err = db.Ping(); err != nil {
-		log.Fatal("Failed to ping database:", err)
+		log.Print("Failed to ping database:", err)
 		return nil, err
 	}
 	log.Println("Database connection successful")
