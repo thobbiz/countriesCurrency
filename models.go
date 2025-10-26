@@ -10,16 +10,16 @@ type CountryModel struct {
 }
 
 type Country struct {
-	Id              int64
-	Name            string
-	Capital         string
-	Region          string
-	Population      int64
-	CurrencyCode    *string
-	ExchangeRate    *float64
-	EstimatedGDP    float64
-	FlagURL         string
-	LastRefreshedAt time.Time
+	Id              int64     `json:"id"`
+	Name            string    `json:"name"`
+	Capital         string    `json:"capital"`
+	Region          string    `json:"region"`
+	Population      int64     `json:"population"`
+	CurrencyCode    *string   `json:"currency_code"`
+	ExchangeRate    *float64  `json:"exchange_rate"`
+	EstimatedGDP    float64   `json:"estimated_gdp"`
+	FlagURL         string    `json:"flag_url"`
+	LastRefreshedAt time.Time `json:"last_refreshed_at"`
 }
 
 type CountryApiResponse struct {

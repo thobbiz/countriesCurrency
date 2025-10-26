@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -115,6 +116,50 @@ func (m *CountryModel) GetImageHandler(ctx *gin.Context) {
 		return
 	}
 	ctx.File(imagePath)
+}
+
+func (m *CountryModel) deleteCountryHandler(c *gin.Context) {
+	name := c.Param("name")
+
+	result, err := m.DB.Exec("DELETE FROM countries WHERE name = ?", name)
+	if err != nil {
+		log.Print(err)
+		c.JSON(http.StatusInternalServerError, errorResponse(errors.New(InternalServerError)))
+		return
+	}
+
+	rowsAffected, _ := result.RowsAffected()
+	if rowsAffected == 0 {
+		c.JSON(http.StatusNotFound, errorResponse(errors.New(NotFound)))
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Country deleted successfully"})
+}
+
+func (m *CountryModel) statusHandler(c *gin.Context) {
+	var count int
+	var lastRefresh time.Time
+
+	// Get total countries
+	err := m.DB.QueryRow("SELECT COUNT(*) FROM countries").Scan(&count)
+	if err != nil {
+		log.Printf("❌ Error getting count: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get status"})
+		return
+	}
+
+	// Get last refresh time
+	err = m.DB.QueryRow("SELECT MAX(updated_at) FROM countries").Scan(&lastRefresh)
+	if err != nil && err != sql.ErrNoRows {
+		log.Printf("❌ Error getting last refresh: %v", err)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"total_countries": count,
+		"last_refreshed":  lastRefresh,
+		"database":        "connected",
+	})
 }
 
 func (m *CountryModel) Insert(countriesAPiResponseList []CountryApiResponse, exchangeRatesResponse *ExchangeRateResponse) error {
