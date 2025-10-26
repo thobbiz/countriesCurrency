@@ -2,20 +2,32 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/joho/godotenv"
 )
 
 func main() {
-	_ = godotenv.Load()
+
+	fmt.Println("--- Printing All Environment Variables ---")
+	for _, e := range os.Environ() {
+		pair := strings.SplitN(e, "=", 2)
+		fmt.Println(pair[0], "=", pair[1])
+	}
+	fmt.Println("------------------------------------")
 
 	dsn := os.Getenv("DB_SOURCE")
 	if dsn == "" {
 		log.Fatal("❌ DB_SOURCE not set")
+	}
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "7070" // Use 7070 as a fallback for local development
 	}
 
 	db, err := openDB(dsn)
@@ -33,7 +45,7 @@ func main() {
 	router.GET("/countries/:name", model.getCountryHandler)
 	router.GET("/countries", model.getCountryWithParamsHandler)
 	router.GET("/countries/image", model.GetImageHandler)
-	router.Run(":7070")
+	router.Run(":" + port)
 }
 
 func openDB(dsn string) (*sql.DB, error) {
