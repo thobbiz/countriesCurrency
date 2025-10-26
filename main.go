@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"log"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
@@ -15,13 +16,15 @@ func init() {
 	}
 }
 
-func main() {
-	config, err := LoadConfig(".")
-	if err != nil {
-		log.Fatal("Cannot load config:", err)
+func main() { // Load .env only if it exists (for local dev)
+	_ = godotenv.Load()
+
+	dsn := os.Getenv("DB_SOURCE")
+	if dsn == "" {
+		log.Fatal("❌ DB_SOURCE not set")
 	}
 
-	db, err := openDB(config.DBSource)
+	db, err := openDB(dsn)
 	if err != nil {
 		log.Fatal(err)
 	}
