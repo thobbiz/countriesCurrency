@@ -50,3 +50,8 @@ type getCountryWithParamRequest struct {
 	Currency string `form:"currency" json:"currency"`
 	Sort     string `form:"sort" json:"sort"`
 }
+
+type countryStatusResponse struct {
+	TotalCountries  int       `json:"total_countries"`
+	LastRefreshedAt time.Time `json:"last_refreshed_at"`
+}

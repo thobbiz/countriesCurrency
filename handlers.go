@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -138,11 +137,11 @@ func (m *CountryModel) deleteCountryHandler(c *gin.Context) {
 }
 
 func (m *CountryModel) statusHandler(c *gin.Context) {
-	var count int
-	var lastRefresh time.Time
+
+	var result countryStatusResponse
 
 	// Get total countries
-	err := m.DB.QueryRow("SELECT COUNT(*) FROM countries").Scan(&count)
+	err := m.DB.QueryRow("SELECT COUNT(*) FROM countries").Scan(&result.TotalCountries)
 	if err != nil {
 		log.Printf("❌ Error getting count: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get status"})
@@ -150,16 +149,12 @@ func (m *CountryModel) statusHandler(c *gin.Context) {
 	}
 
 	// Get last refresh time
-	err = m.DB.QueryRow("SELECT MAX(updated_at) FROM countries").Scan(&lastRefresh)
+	err = m.DB.QueryRow("SELECT MAX(updated_at) FROM countries").Scan(&result.LastRefreshedAt)
 	if err != nil && err != sql.ErrNoRows {
 		log.Printf("❌ Error getting last refresh: %v", err)
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"total_countries": count,
-		"last_refreshed":  lastRefresh,
-		"database":        "connected",
-	})
+	c.JSON(http.StatusOK, result)
 }
 
 func (m *CountryModel) Insert(countriesAPiResponseList []CountryApiResponse, exchangeRatesResponse *ExchangeRateResponse) error {
