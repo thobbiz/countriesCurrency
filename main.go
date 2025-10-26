@@ -29,9 +29,9 @@ func main() {
 		log.Fatalf("❌ Could not parse DSN: %v", err)
 	}
 
-	port := os.Getenv("DB_PORT")
+	port := os.Getenv("PORT")
 	if port == "" {
-		port = "7070" // Use 7070 as a fallback for local development
+		port = "8080" // Use 7070 as a fallback for local development
 	}
 
 	cfg.Net = "tcp"
