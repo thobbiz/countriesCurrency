@@ -19,7 +19,7 @@ func main() {
 	dsn := os.Getenv("DB_SOURCE")
 
 	log.Printf("--- DEBUG ---")
-	log.Printf("DB_HOST: [%s]", dbSource)
+	log.Printf("DB_HOST: [%s]", dsn)
 	log.Printf("-------------")
 
 	// dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPass, dbHost, dbPort, dbName)
