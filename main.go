@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-sql-driver/mysql"
@@ -56,6 +57,13 @@ func main() {
 	router.GET("/countries/:name", model.getCountryHandler)
 	router.GET("/countries", model.getCountryWithParamsHandler)
 	router.GET("/countries/image", model.GetImageHandler)
+	router.GET("/health", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"status": "healthy",
+			"port":   os.Getenv("PORT"),
+			"time":   time.Now(),
+		})
+	})
 	router.Run(":" + port)
 }
 
