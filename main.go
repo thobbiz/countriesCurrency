@@ -36,16 +36,12 @@ func main() {
 	}
 
 	cfg.Net = "tcp"
+	cfg.ParseTime = true
 
 	db, err := openDB(cfg.FormatDSN())
 	if err != nil {
 		log.Print(err)
 	}
-
-	// db, err := openDB(dsn)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
 
 	model := &CountryModel{
 		DB: db,
