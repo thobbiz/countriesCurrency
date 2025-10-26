@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
@@ -13,19 +12,15 @@ import (
 
 func main() {
 
-	fmt.Println("--- Printing All Environment Variables ---")
-	for _, e := range os.Environ() {
-		pair := strings.SplitN(e, "=", 2)
-		fmt.Println(pair[0], "=", pair[1])
-	}
-	fmt.Println("------------------------------------")
+	dbUser := os.Getenv("DB_USER")
+	dbPass := os.Getenv("DB_PASS")
+	dbHost := os.Getenv("DB_HOST")
+	dbPort := os.Getenv("DB_PORT")
+	dbName := os.Getenv("DB_NAME")
 
-	dsn := os.Getenv("DB_SOURCE")
-	if dsn == "" {
-		log.Fatal("❌ DB_SOURCE not set")
-	}
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPass, dbHost, dbPort, dbName)
 
-	port := os.Getenv("PORT")
+	port := os.Getenv("DB_PORT")
 	if port == "" {
 		port = "7070" // Use 7070 as a fallback for local development
 	}
