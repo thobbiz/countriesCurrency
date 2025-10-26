@@ -2,18 +2,26 @@ package main
 
 import (
 	"database/sql"
-	"flag"
 	"log"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/joho/godotenv"
 )
 
-func main() {
-	dsn := flag.String("dsn", "code:abifoluwa3#@tcp(localhost:3307)/countries?parseTime=true", "MySQL data source name")
-	flag.Parse()
+func init() {
+	if err := godotenv.Load(); err != nil {
+		log.Println(" No .env file found, using environment variables from system.")
+	}
+}
 
-	db, err := openDB(*dsn)
+func main() {
+	config, err := LoadConfig(".")
+	if err != nil {
+		log.Fatal("Cannot load config:", err)
+	}
+
+	db, err := openDB(config.DBSource)
 	if err != nil {
 		log.Fatal(err)
 	}
